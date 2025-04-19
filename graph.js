@@ -199,7 +199,7 @@ restartBtn.onclick = () => {
   selectedAcid = '';
   selectedLiquid = '';
   selectedFlavors = [];
-  document.getElementById("info-box").innerText = "Explore ingredients for dressing";
+  document.getElementById("info-box").innerText = "Explore ingredients for dressing!";
   updateGraph();
 };
 document.body.appendChild(restartBtn);
