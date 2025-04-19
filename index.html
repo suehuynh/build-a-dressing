@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salad Dressing Recommender</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Build-a-Dressing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://d3js.org/d3.v7.min.js"></script>   
 </head>
 <body>
-  <h1>🥗 Salad Dressing Recommender</h1>
+  <h1>Salad Dressing Recommender</h1>
+  <div id="info-box">Explore ingredients for your dressing!</div>
   <div id="graph"></div>
-  <div id="info-box"></div>
+  <p>Choose your dressing style + ingredients & follow this ratio for your unique dressing</p>
+  <div class="ratio">
+    <div class="ratio-card">
+      <h3>Vinaigrette</h3>
+      <p>3 Parts Oil + 1 Part Acid + 1 Part Flavor</p>
+    </div>
+    <div class="ratio-card">
+      <h3>Creamy</h3>
+      <p>3 Parts Creamy Base + 1 Part Liquid + 1 Part Flavor</p>
+    </div>
+  </div>
+  <script src="graph.js"></script>
 </body>
 </html>
