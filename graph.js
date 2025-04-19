@@ -11,46 +11,81 @@ const svg = d3.select("#graph")
 
 // Graph data with hierarchy levels
 const allNodes = [
+  // Styles
   { id: 'Vinaigrette', group: 'style', level: 0 },
   { id: 'Creamy', group: 'style', level: 0 },
+
+  // Components
   { id: 'Oil', group: 'component', level: 1 },
   { id: 'Acid', group: 'component', level: 1 },
   { id: 'Flavor', group: 'component', level: 1 },
   { id: 'Liquid', group: 'component', level: 1 },
   { id: 'Creamy Ingredient', group: 'component', level: 1 },
-  { id: 'Olive Oil', group: 'ingredient', level: 2 },
-  { id: 'Sesame Oil', group: 'ingredient', level: 2 },
-  { id: 'Vinegar', group: 'ingredient', level: 2 },
-  { id: 'Lemon Juice', group: 'ingredient', level: 2 },
-  { id: 'Garlic', group: 'ingredient', level: 2 },
-  { id: 'Mustard', group: 'ingredient', level: 2 },
-  { id: 'Yogurt', group: 'ingredient', level: 2 },
-  { id: 'Mayo', group: 'ingredient', level: 2 },
-  { id: 'Buttermilk', group: 'ingredient', level: 2 },
-  { id: 'Water', group: 'ingredient', level: 2 },
-  { id: 'Whole Milk', group: 'ingredient', level: 2 },
+
+  // Ingredients (level 2)
+  { id: 'olive oil', group: 'ingredient', level: 2 },
+  { id: 'sesame oil', group: 'ingredient', level: 2 },
+  { id: 'avocado oil', group: 'ingredient', level: 2 },
+  { id: 'grapeseed oil', group: 'ingredient', level: 2 },
+  { id: 'vinegar', group: 'ingredient', level: 2 },
+  { id: 'lemon juice', group: 'ingredient', level: 2 },
+  { id: 'lime juice', group: 'ingredient', level: 2 },
+  { id: 'buttermilk', group: 'ingredient', level: 2 },
+  { id: 'water', group: 'ingredient', level: 2 },
+  { id: 'herbs', group: 'ingredient', level: 2 },
+  { id: 'shallots', group: 'ingredient', level: 2 },
+  { id: 'mustard', group: 'ingredient', level: 2 },
+  { id: 'garlic', group: 'ingredient', level: 2 },
+  { id: 'soy sauce', group: 'ingredient', level: 2 },
+  { id: 'blue cheese', group: 'ingredient', level: 2 },
+  { id: 'anchovies', group: 'ingredient', level: 2 },
+  { id: 'yogurt', group: 'ingredient', level: 2 },
+  { id: 'mayo', group: 'ingredient', level: 2 },
+  { id: 'avocado', group: 'ingredient', level: 2 },
+  { id: 'creme fraiche', group: 'ingredient', level: 2 },
+  { id: 'sour cream', group: 'ingredient', level: 2 },
 ];
 
+
 const allLinks = [
+  // Style to Component
   { source: 'Vinaigrette', target: 'Oil' },
   { source: 'Vinaigrette', target: 'Acid' },
   { source: 'Vinaigrette', target: 'Flavor' },
   { source: 'Creamy', target: 'Creamy Ingredient' },
   { source: 'Creamy', target: 'Liquid' },
   { source: 'Creamy', target: 'Flavor' },
-  { source: 'Oil', target: 'Olive Oil' },
-  { source: 'Oil', target: 'Sesame Oil' },
-  { source: 'Acid', target: 'Vinegar' },
-  { source: 'Acid', target: 'Lemon Juice' },
-  { source: 'Liquid', target: 'Buttermilk' },
-  { source: 'Liquid', target: 'Lemon Juice' },
-  { source: 'Liquid', target: 'Water' },
-  { source: 'Liquid', target: 'Whole Milk' },
-  { source: 'Flavor', target: 'Garlic' },
-  { source: 'Flavor', target: 'Mustard' },
-  { source: 'Creamy Ingredient', target: 'Yogurt' },
-  { source: 'Creamy Ingredient', target: 'Mayo' },
+
+  // Component to Ingredients
+  { source: 'Oil', target: 'olive oil' },
+  { source: 'Oil', target: 'sesame oil' },
+  { source: 'Oil', target: 'avocado oil' },
+  { source: 'Oil', target: 'grapeseed oil' },
+
+  { source: 'Acid', target: 'vinegar' },
+  { source: 'Acid', target: 'lemon juice' },
+  { source: 'Acid', target: 'lime juice' },
+
+  { source: 'Liquid', target: 'lemon juice' },
+  { source: 'Liquid', target: 'lime juice' },
+  { source: 'Liquid', target: 'buttermilk' },
+  { source: 'Liquid', target: 'water' },
+
+  { source: 'Flavor', target: 'herbs' },
+  { source: 'Flavor', target: 'shallots' },
+  { source: 'Flavor', target: 'mustard' },
+  { source: 'Flavor', target: 'garlic' },
+  { source: 'Flavor', target: 'soy sauce' },
+  { source: 'Flavor', target: 'blue cheese' },
+  { source: 'Flavor', target: 'anchovies' },
+
+  { source: 'Creamy Ingredient', target: 'yogurt' },
+  { source: 'Creamy Ingredient', target: 'mayo' },
+  { source: 'Creamy Ingredient', target: 'avocado' },
+  { source: 'Creamy Ingredient', target: 'creme fraiche' },
+  { source: 'Creamy Ingredient', target: 'sour cream' },
 ];
+
 
 let activeNodes = allNodes.filter(n => n.level === 0);
 let activeLinks = [];
@@ -150,9 +185,14 @@ function handleClick(event, d) {
     } else {
       // Select
       selectedIngredients.push(d.id);
-      if (["Olive Oil", "Sesame Oil", "Yogurt", "Mayo"].includes(d.id)) selectedBase = d.id;
-      else if (["Vinegar", "Lemon Juice"].includes(d.id)) selectedAcid = d.id;
-      else if (["Buttermilk", "Water", "Whole Milk", "Lemon Juice"].includes(d.id)) selectedLiquid = d.id;
+      const baseOptions = ["olive oil", "sesame oil", "avocado oil", "grapeseed oil", "yogurt", "mayo", "avocado", "creme fraiche", "sour cream"];
+      const acidOptions = ["vinegar", "lemon juice", "lime juice"];
+      const liquidOptions = ["buttermilk", "water", "lemon juice", "lime juice"];
+      const flavorOptions = ["herbs", "shallots", "mustard", "garlic", "soy sauce", "blue cheese", "anchovies"];
+
+      if (baseOptions.includes(d.id)) selectedBase = d.id;
+      else if (acidOptions.includes(d.id)) selectedAcid = d.id;
+      else if (liquidOptions.includes(d.id)) selectedLiquid = d.id;
       else selectedFlavors.push(d.id);
     }
 
@@ -161,7 +201,7 @@ function handleClick(event, d) {
 
     if (selectedBase && (selectedAcid || selectedLiquid) && selectedFlavors.length) {
       let recipe = '';
-      if (["Olive Oil", "Sesame Oil"].includes(selectedBase)) {
+      if (["olive oil", "sesame oil", "avocado oil", "grapeseed oil"].includes(selectedBase)) {
         recipe = `3 ${selectedBase} + 1 ${selectedAcid} + 1 ${selectedFlavors.join(', ')}`;
       } else {
         recipe = `3 ${selectedBase} + 1 ${selectedLiquid} + 1 ${selectedFlavors.join(', ')}`;
