@@ -1,0 +1,23 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #fff8f0;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+}
+
+#graph {
+  display: flex;
+  justify-content: center;
+}
+
+#info-box {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #555;
+}
