@@ -1,6 +1,6 @@
 const container = document.getElementById("graph");
 const width = container.offsetWidth;
-const height = window.innerHeight * 0.6;
+const height = window.innerHeight * 0.5;
 
 const svg = d3.select("#graph")
   .append("svg")
