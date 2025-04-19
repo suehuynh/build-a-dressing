@@ -5,9 +5,9 @@ const height = window.innerHeight * 0.6;
 const svg = d3.select("#graph")
   .append("svg")
   .attr("viewBox", `0 0 ${width} ${height}`)
-  // .attr("preserveAspectRatio", "xMidYMid meet")
-  .style("width", "75vh")
-  .style("height", "75vh");
+  .attr("preserveAspectRatio", "xMidYMid meet")
+  .style("width", "100%")
+  .style("height", "100vh");
 
 // Graph data with hierarchy levels
 const allNodes = [
