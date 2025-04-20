@@ -9,20 +9,14 @@ const svg = d3.select("#graph")
   .style("width", "100%")
   .style("height", "100vh");
 
-// Graph data with hierarchy levels
 const allNodes = [
-  // Styles
   { id: 'Vinaigrette', group: 'style', level: 0 },
   { id: 'Creamy', group: 'style', level: 0 },
-
-  // Components
   { id: 'Oil', group: 'component', level: 1 },
   { id: 'Acid', group: 'component', level: 1 },
   { id: 'Flavor', group: 'component', level: 1 },
   { id: 'Liquid', group: 'component', level: 1 },
   { id: 'Creamy Ingredient', group: 'component', level: 1 },
-
-  // Ingredients (level 2)
   { id: 'olive oil', group: 'ingredient', level: 2 },
   { id: 'sesame oil', group: 'ingredient', level: 2 },
   { id: 'avocado oil', group: 'ingredient', level: 2 },
@@ -46,31 +40,24 @@ const allNodes = [
   { id: 'sour cream', group: 'ingredient', level: 2 },
 ];
 
-
 const allLinks = [
-  // Style to Component
   { source: 'Vinaigrette', target: 'Oil' },
   { source: 'Vinaigrette', target: 'Acid' },
   { source: 'Vinaigrette', target: 'Flavor' },
   { source: 'Creamy', target: 'Creamy Ingredient' },
   { source: 'Creamy', target: 'Liquid' },
   { source: 'Creamy', target: 'Flavor' },
-
-  // Component to Ingredients
   { source: 'Oil', target: 'olive oil' },
   { source: 'Oil', target: 'sesame oil' },
   { source: 'Oil', target: 'avocado oil' },
   { source: 'Oil', target: 'grapeseed oil' },
-
   { source: 'Acid', target: 'vinegar' },
   { source: 'Acid', target: 'lemon juice' },
   { source: 'Acid', target: 'lime juice' },
-
   { source: 'Liquid', target: 'lemon juice' },
   { source: 'Liquid', target: 'lime juice' },
   { source: 'Liquid', target: 'buttermilk' },
   { source: 'Liquid', target: 'water' },
-
   { source: 'Flavor', target: 'herbs' },
   { source: 'Flavor', target: 'shallots' },
   { source: 'Flavor', target: 'mustard' },
@@ -78,14 +65,12 @@ const allLinks = [
   { source: 'Flavor', target: 'soy sauce' },
   { source: 'Flavor', target: 'blue cheese' },
   { source: 'Flavor', target: 'anchovies' },
-
   { source: 'Creamy Ingredient', target: 'yogurt' },
   { source: 'Creamy Ingredient', target: 'mayo' },
   { source: 'Creamy Ingredient', target: 'avocado' },
   { source: 'Creamy Ingredient', target: 'creme fraiche' },
   { source: 'Creamy Ingredient', target: 'sour cream' },
 ];
-
 
 let activeNodes = allNodes.filter(n => n.level === 0);
 let activeLinks = [];
@@ -137,7 +122,13 @@ function updateGraph() {
     .attr("r", d => sizeMap[d.group])
     .attr("fill", d => selectedIngredients.includes(d.id) || d.group !== 'ingredient' ? colorMap[d.group] : colorMap.inactive)
     .style("cursor", "pointer")
-    .on("click", handleClick);
+    .on("click", handleClick)
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended)
+    );
+
   node = entered.merge(node);
 
   label = label.data(activeNodes, d => d.id);
@@ -176,14 +167,12 @@ function handleClick(event, d) {
   if (d.group === 'ingredient') {
     const index = selectedIngredients.indexOf(d.id);
     if (index > -1) {
-      // Deselect
       selectedIngredients.splice(index, 1);
       if (d.id === selectedBase) selectedBase = '';
       if (d.id === selectedAcid) selectedAcid = '';
       if (d.id === selectedLiquid) selectedLiquid = '';
       selectedFlavors = selectedFlavors.filter(f => f !== d.id);
     } else {
-      // Select
       selectedIngredients.push(d.id);
       const baseOptions = ["olive oil", "sesame oil", "avocado oil", "grapeseed oil", "yogurt", "mayo", "avocado", "creme fraiche", "sour cream"];
       const acidOptions = ["vinegar", "lemon juice", "lime juice"];
@@ -225,7 +214,23 @@ function handleClick(event, d) {
   updateGraph();
 }
 
-// Add a restart button
+function dragstarted(event, d) {
+  if (!event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(event, d) {
+  d.fx = event.x;
+  d.fy = event.y;
+}
+
+function dragended(event, d) {
+  if (!event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
 const restartBtn = document.createElement("button");
 restartBtn.innerText = "Start Over";
 restartBtn.style.position = "absolute";
